@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ConsoleApp1
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private const string Path = @"C:\Users\julian.adler\Documents\TestAndQuestions\ConsoleApp1\";
+        private const string Link = "http://AAAAAA.com";
+
+        private static void Main(string[] args)
         {
             var designDataList = GetA();
 
-            var json = File.ReadAllText("D:\\Development\\ConsoleApp1\\ConsoleApp1\\json1.json");
+            var json = File.ReadAllText($"{Path}json1.json");
             var deserializeObject = JsonConvert.DeserializeObject<List<DesignData>>(json, new JsonSerializerSettings() { Converters = { new TestConverter() } });
         }
 
@@ -25,7 +24,7 @@ namespace ConsoleApp1
             {
                 new DesignData()
                 {
-                    Type = Type.Template,
+                    WhateverItIsType = WhateverItIsType.Template,
                     Name = "Header",
                     Designs = new List<DataClass>
                     {
@@ -35,20 +34,20 @@ namespace ConsoleApp1
                 },
                 new DesignData()
                 {
-                    Type = Type.Template,
+                    WhateverItIsType = WhateverItIsType.Template,
                     Name = "Logo",
                     Designs = new List<DataClass>
                     {
-                        new DataClass(){ Key = "LogoWithWebLink", Data = new WebLink(){ Data = File.OpenRead("D:\\Development\\ConsoleApp1\\ConsoleApp1\\images\\samplejpg.jpg") as Stream, Url = "http://AAAAAA.com" }, Type = DataType.WebLinkWithImage},
+                        new DataClass(){ Key = "LogoWithWebLink", Data = new WebLink(){ Data = File.OpenRead($"{Path}images\\samplejpg.jpg"), Url = Link }, Type = DataType.WebLinkWithImage},
                     }
                 },
                 new DesignData()
                 {
-                    Type = Type.Template,
+                    WhateverItIsType = WhateverItIsType.Template,
                     Name = "Footer",
                     Designs = new List<DataClass>
                     {
-                        new DataClass(){ Key = "webLink", Data = new WebLink(){ Data = "AAAAAA", Url = "https://AAAAAA.com" }, Type = DataType.WebLinkWithText},
+                        new DataClass(){ Key = "webLink", Data = new WebLink(){ Data = "AAAAAA", Url = Link }, Type = DataType.WebLinkWithText},
                     }
                 }
             };
@@ -70,6 +69,7 @@ namespace ConsoleApp1
             /*
              * How can I?
              */
+            return null;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -88,7 +88,7 @@ namespace ConsoleApp1
     public class DesignData
     {
 
-        public Type Type { get; set; }
+        public WhateverItIsType WhateverItIsType { get; set; }
         public string Name { get; set; }
         public IEnumerable<DataClass> Designs { get; set; }
     }
@@ -111,7 +111,7 @@ namespace ConsoleApp1
         Condition = 7
     }
 
-    public enum Type
+    public enum WhateverItIsType
     {
         Product = 0,
         Group = 1,
