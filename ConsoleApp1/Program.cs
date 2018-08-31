@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ConsoleApp1
 {
     internal class Program
     {
-        private const string Path = @"C:\Users\julian.adler\Documents\TestAndQuestions\ConsoleApp1\";
+        private const string Path = @"D:\Development\ConsoleApp1\ConsoleApp1\";
         private const string Link = "http://AAAAAA.com";
 
         private static void Main(string[] args)
@@ -25,20 +26,20 @@ namespace ConsoleApp1
                 new DesignData()
                 {
                     WhateverItIsType = WhateverItIsType.Template,
-                    Name = "Header",
+                    Name = "Logo",
                     Designs = new List<DataClass>
                     {
-                            new DataClass(){ Key = "CustomerGroup", Data = "testTitle", Type = DataType.String} ,
-                            new DataClass(){ Key = "CreatedDate", Data = $"(as at {DateTime.Now.ToString("dd/MM/yyyy")})", Type = DataType.String}
+                        new DataClass(){Key = "LogoWithWebLink", Data = new WebLink(){ Data = File.OpenRead($"{Path}images\\samplejpg.jpg"), Url = Link }, Type = DataType.WebLinkWithImage },
                     }
                 },
                 new DesignData()
                 {
                     WhateverItIsType = WhateverItIsType.Template,
-                    Name = "Logo",
+                    Name = "Header",
                     Designs = new List<DataClass>
                     {
-                        new DataClass(){ Key = "LogoWithWebLink", Data = new WebLink(){ Data = File.OpenRead($"{Path}images\\samplejpg.jpg"), Url = Link }, Type = DataType.WebLinkWithImage},
+                            new DataClass(){ Key = "CustomerGroup", Data = "testTitle", Type = DataType.String } ,
+                            new DataClass(){ Key = "CreatedDate", Data = $"(as at {DateTime.Now.ToString("dd/MM/yyyy")})", Type = DataType.String}
                     }
                 },
                 new DesignData()
@@ -61,15 +62,28 @@ namespace ConsoleApp1
 
         public override bool CanConvert(System.Type objectType)
         {
-            return (objectType == typeof(DataClass));
+            return (objectType == typeof(object));
         }
 
         public override object ReadJson(JsonReader reader, System.Type objectType, object existingValue, JsonSerializer serializer)
         {
-            /*
-             * How can I?
-             */
-            return null;
+            var token = JToken.Load(reader);
+            if (token.SelectToken("__type") != null)
+            {
+                if (token["__type"].Value<string>() == "WebLink")
+                {
+                    return token.ToObject<WebLink>();
+                }
+                else if (token["__type"].Value<string>() == "String")
+                {
+                    return token.ToString();
+                }
+                return null;
+            }
+            else
+            {
+                return token.ToString();
+            }
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -87,7 +101,6 @@ namespace ConsoleApp1
     }
     public class DesignData
     {
-
         public WhateverItIsType WhateverItIsType { get; set; }
         public string Name { get; set; }
         public IEnumerable<DataClass> Designs { get; set; }

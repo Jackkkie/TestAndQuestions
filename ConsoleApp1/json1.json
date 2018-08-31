@@ -1,12 +1,26 @@
 ﻿[
   {
     "Type": "Template",
+    "Name": "Logo",
+    "Designs": [
+      {
+        "Key": "LogoWithWebLink",
+        "Data": {
+          "__type": "WebLink",
+          "Data": "File.OpenRead(D:\\Development\\ConsoleApp1\\ConsoleApp1\\images\\samplejpg.jpg) as Stream",
+          "Url": "http://www.AAAAAA.com/"
+        },
+        "Type": "WebLinkWithImage"
+      }
+    ]
+  },
+  {
+    "Type": "Template",
     "Name": "Header",
     "Designs": [
       {
         "Key": "CustomerGroup",
-        "Data": "title",
-        "Type": "String"
+        "Data": "title"
       },
       {
         "Key": "txtCreatedDate",
@@ -15,20 +29,7 @@
       }
     ]
   },
-  {
-    "Type": "Template",
-    "Name": "Logo",
-    "Designs": [
-      {
-        "Key": "LogoWithWebLink",
-        "Data": {
-          "Data": "File.OpenRead(D:\\Development\\ConsoleApp1\\ConsoleApp1\\images\\samplejpg.jpg) as Stream",
-          "Url": "http://www.AAAAAA.com/"
-        },
-        "Type": "WebLinkWithImage"
-      }
-    ] 
-  },
+
   {
     "Type": "Template",
     "Name": "Footer",
@@ -36,6 +37,7 @@
       {
         "Key": "webLink",
         "Data": {
+          "__type": "WebLink",
           "Data": "AAAAAA",
           "Url": "http://AAAAAA.com/"
         },
